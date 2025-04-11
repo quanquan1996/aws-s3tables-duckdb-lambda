@@ -4,7 +4,7 @@ import duckdb
 import boto3
 
 con = duckdb.connect(database=':memory:', config={'memory_limit': '9GB','worker_threads': 5,'temp_directory':'/tmp'})
-ext_dir = '/tmp/.duckdb'
+ext_dir = '/tmp/file/.duckdb'
 print(f"DUCKDB_EXT_DIR: {ext_dir}")
 if not os.path.exists(ext_dir):
     os.makedirs(ext_dir)
@@ -18,11 +18,7 @@ print(con.execute(f"SET home_directory='{ext_dir}'").fetchall())
 # 验证设置
 result = con.execute("SELECT current_setting('home_directory')").fetchone()[0]
 print(f"Home directory: {result}")
-con.execute("""
-FORCE INSTALL aws FROM core_nightly;
-FORCE INSTALL httpfs FROM core_nightly;
-FORCE INSTALL iceberg FROM core_nightly;
-CREATE SECRET (
+con.execute("""CREATE SECRET (
     TYPE s3,
     PROVIDER credential_chain
 );
