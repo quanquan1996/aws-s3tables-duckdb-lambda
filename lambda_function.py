@@ -6,6 +6,9 @@ os.environ['HOME'] = '/tmp'
 con = duckdb.connect(database=':memory:', config={'memory_limit': '9GB','worker_threads': 5,'temp_directory':'/tmp/file/overmem'})
 # 验证设置
 con.execute("""
+FORCE INSTALL aws FROM core_nightly;
+FORCE INSTALL httpfs FROM core_nightly;
+FORCE INSTALL iceberg FROM core_nightly;
 CREATE SECRET (
     TYPE s3,
     PROVIDER credential_chain

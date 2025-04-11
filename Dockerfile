@@ -5,20 +5,7 @@ COPY requirements.txt ${LAMBDA_TASK_ROOT}
 
 # Install the specified packages
 RUN pip install -r requirements.txt
-RUN ls && \
-    # Run python to install extensions, telling DuckDB to use the created directory
-    python -c "\
-import duckdb;\
-import os;\
-os.environ['HOME'] = '/tmp';\
-con = duckdb.connect(database=':memory:', read_only=False);\
-# Set the home_directory AFTER connecting using the SET command.\
-con.execute('INSTALL aws FROM core_nightly;');\
-con.execute('INSTALL httpfs FROM core_nightly;');\
-con.execute('INSTALL iceberg FROM core_nightly;');\
-print('Extensions installed during build.');\
-con.close();\
-"
+
 # Copy function code
 COPY lambda_function.py ${LAMBDA_TASK_ROOT}
 
