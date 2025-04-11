@@ -10,7 +10,7 @@ RUN ls && \
     python -c "\
 import duckdb;\
 import os;\
-os.environ['HOME'] = '/tmp'\
+os.environ['HOME'] = '/tmp';\
 con = duckdb.connect(database=':memory:', read_only=False);\
 # Set the home_directory AFTER connecting using the SET command.\
 con.execute('INSTALL aws FROM core_nightly;');\
