@@ -5,7 +5,7 @@ COPY requirements.txt ${LAMBDA_TASK_ROOT}
 
 # Install the specified packages
 RUN pip install -r requirements.txt
-RUN mkdir -p ${DUCKDB_EXT_DIR} && \
+RUN ls && \
     # Run python to install extensions, telling DuckDB to use the created directory
     python -c "\
 import duckdb;\
