@@ -4,6 +4,7 @@ import duckdb
 import boto3
 os.environ['HOME'] = '/tmp/file'
 con = duckdb.connect(database=':memory:', config={'memory_limit': '9GB','worker_threads': 5,'temp_directory':'/tmp/file/overmem'})
+con.execute("SET home_directory = '/tmp/file/home';")
 print(f"os HOME: {os.environ['HOME']}")
 # 验证设置
 result = con.execute("SELECT current_setting('home_directory')").fetchone()[0]

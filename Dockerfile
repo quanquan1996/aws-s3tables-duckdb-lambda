@@ -5,13 +5,16 @@ COPY requirements.txt ${LAMBDA_TASK_ROOT}
 
 # Install the specified packages
 RUN pip install -r requirements.txt
-ARG HOME="/tmp/file"
-RUN mkdir -p ${HOME} && \
+ARG DUCKDB_EXT_DIR="/tmp/file/home"
+RUN mkdir -p ${DUCKDB_EXT_DIR} && \
     # Run python to install extensions, telling DuckDB to use the created directory
     python -c "\
 import duckdb;\
+import os;\
+ext_dir = os.environ.get('DUCKDB_EXT_DIR');\
 con = duckdb.connect(database=':memory:', read_only=False);\
 # Set the home_directory AFTER connecting using the SET command.\
+con.execute(f\"SET home_directory='{ext_dir}'\");\
 con.execute('INSTALL aws FROM core_nightly;');\
 con.execute('INSTALL httpfs FROM core_nightly;');\
 con.execute('INSTALL iceberg FROM core_nightly;');\
