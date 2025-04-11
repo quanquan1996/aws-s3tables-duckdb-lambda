@@ -29,8 +29,20 @@ item_category    STRING    COMMENT '商品类别ID（非真实ID），经抽样&
 behavior_type    STRING    COMMENT '用户对商品的行为类型,包括浏览、收藏、加购物车、购买，pv,fav,cart,buy)',
 behavior_time    STRING    COMMENT '行为时间,精确到小时级别' ) USING iceberg
 ```
-测试sql:
+测试sql:              
+用户行为数据漏斗分析
 ``` 
+-- 用户行为漏斗分析
+-- 总用户数(total_users)
+-- 浏览过商品的用户数(users_with_views)
+-- 收藏过商品的用户数(users_with_favorites)
+-- 加入购物车的用户数(users_with_cart_adds)
+-- 完成购买的用户数(users_with_purchases)
+-- 浏览率(view_rate)：浏览用户占总用户百分比
+-- 浏览到收藏转化率(view_to_favorite_rate)
+-- 收藏到加购转化率(favorite_to_cart_rate)
+-- 加购到购买转化率(cart_to_purchase_rate)
+-- 整体转化率(overall_conversion_rate)：购买用户占总用户百分比
 WITH user_behavior_counts AS (
     SELECT
         user_id,
@@ -63,6 +75,6 @@ SELECT
     ROUND(100.0 * users_with_purchases / total_users, 2) AS overall_conversion_rate
 FROM funnel_stages;
 ```
-lambda测试结果： 
+lambda测试结果：
 消耗内存:1934M  
 用时:37s  
