@@ -1,7 +1,7 @@
 import duckdb
 import boto3
 
-con = duckdb.connect(database=':memory:', config={'memory_limit': '9GB','worker_threads': 5,'home_directory':'/tmp'})
+con = duckdb.connect(database=':memory:', config={'memory_limit': '9GB','worker_threads': 5,'temp_directory':'/tmp'})
 con.execute("""
 FORCE INSTALL aws FROM core_nightly;
 FORCE INSTALL httpfs FROM core_nightly;
