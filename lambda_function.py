@@ -1,7 +1,11 @@
+import os
+
 import duckdb
 import boto3
 
 con = duckdb.connect(database=':memory:', config={'memory_limit': '9GB','worker_threads': 5,'temp_directory':'/tmp'})
+ext_dir = os.environ.get('DUCKDB_EXT_DIR');
+con.execute(f"SET home_directory='{ext_dir}'")
 con.execute("""
 CREATE SECRET (
     TYPE s3,
