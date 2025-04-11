@@ -4,17 +4,7 @@ import duckdb
 import boto3
 
 con = duckdb.connect(database=':memory:', config={'memory_limit': '9GB','worker_threads': 5,'temp_directory':'/tmp'})
-ext_dir = '/tmp/file/.duckdb'
-print(f"DUCKDB_EXT_DIR: {ext_dir}")
-if not os.path.exists(ext_dir):
-    os.makedirs(ext_dir)
-    print(f"目录 '{ext_dir}' 已创建")
-else:
-    print(f"目录 '{ext_dir}' 已存在")
-# 检查权限
-print(f"Directory exists: {os.path.exists(ext_dir)}, Writable: {os.access(ext_dir, os.W_OK)}")
-
-print(con.execute(f"SET home_directory='{ext_dir}'").fetchall())
+print(f"os HOME: {os.environ['HOME']}")
 # 验证设置
 result = con.execute("SELECT current_setting('home_directory')").fetchone()[0]
 print(f"Home directory: {result}")
