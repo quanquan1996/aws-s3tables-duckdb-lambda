@@ -34,7 +34,3 @@ def handler(event, context):
             "statusCode": 500,
             "error": str(e)
         }
-event = {
-    "sql": "select * from testtable.testdb.test_table;`"
-}
-handler(event, None)
