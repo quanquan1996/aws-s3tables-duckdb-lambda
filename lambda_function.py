@@ -9,7 +9,11 @@ print(f"os HOME: {os.environ['HOME']}")
 # 验证设置
 result = con.execute("SELECT current_setting('home_directory')").fetchone()[0]
 print(f"Home directory: {result}")
-con.execute("""CREATE SECRET (
+con.execute("""
+FORCE INSTALL aws FROM core_nightly;
+FORCE INSTALL httpfs FROM core_nightly;
+FORCE INSTALL iceberg FROM core_nightly;
+CREATE SECRET (
     TYPE s3,
     PROVIDER credential_chain
 );
