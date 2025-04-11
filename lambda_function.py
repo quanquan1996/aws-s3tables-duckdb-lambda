@@ -5,7 +5,10 @@ import boto3
 
 con = duckdb.connect(database=':memory:', config={'memory_limit': '9GB','worker_threads': 5,'temp_directory':'/tmp'})
 ext_dir = os.environ.get('DUCKDB_EXT_DIR');
-con.execute(f"SET home_directory='{ext_dir}'")
+print(con.execute(f"SET home_directory='{ext_dir}'").fetchall())
+# 验证设置
+result = con.execute("SELECT current_setting('home_directory')").fetchone()[0]
+print(f"Home directory: {result}")
 con.execute("""
 CREATE SECRET (
     TYPE s3,
