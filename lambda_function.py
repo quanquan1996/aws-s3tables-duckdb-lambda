@@ -1,12 +1,8 @@
 import duckdb
 import boto3
 
-con = duckdb.connect(database=':memory:', config={'memory_limit': '9GB','worker_threads': 5,'temp_directory':'/tmp'})
-con.execute("SET home_directory='/tmp'")
+con = duckdb.connect(database=':memory:', config={'memory_limit': '9GB','worker_threads': 5,'temp_directory':'/tmp','home_directory':'/tmp'})
 con.execute("""
-FORCE INSTALL aws FROM core_nightly;
-FORCE INSTALL httpfs FROM core_nightly;
-FORCE INSTALL iceberg FROM core_nightly;
 CREATE SECRET (
     TYPE s3,
     PROVIDER credential_chain
@@ -38,3 +34,7 @@ def handler(event, context):
             "statusCode": 500,
             "error": str(e)
         }
+event = {
+    "sql": "select * from testtable.testdb.test_table;`"
+}
+handler(event, None)
