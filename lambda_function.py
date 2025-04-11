@@ -4,10 +4,13 @@ import duckdb
 import boto3
 
 con = duckdb.connect(database=':memory:', config={'memory_limit': '9GB','worker_threads': 5,'temp_directory':'/tmp'})
-ext_dir = os.environ.get('DUCKDB_EXT_DIR')
+ext_dir = '/tmp/.duckdb'
 print(f"DUCKDB_EXT_DIR: {ext_dir}")
-# 确保目录存在
-os.makedirs(ext_dir, exist_ok=True)
+if not os.path.exists(ext_dir):
+    os.makedirs(ext_dir)
+    print(f"目录 '{ext_dir}' 已创建")
+else:
+    print(f"目录 '{ext_dir}' 已存在")
 # 检查权限
 print(f"Directory exists: {os.path.exists(ext_dir)}, Writable: {os.access(ext_dir, os.W_OK)}")
 
@@ -16,6 +19,9 @@ print(con.execute(f"SET home_directory='{ext_dir}'").fetchall())
 result = con.execute("SELECT current_setting('home_directory')").fetchone()[0]
 print(f"Home directory: {result}")
 con.execute("""
+FORCE INSTALL aws FROM core_nightly;
+FORCE INSTALL httpfs FROM core_nightly;
+FORCE INSTALL iceberg FROM core_nightly;
 CREATE SECRET (
     TYPE s3,
     PROVIDER credential_chain
