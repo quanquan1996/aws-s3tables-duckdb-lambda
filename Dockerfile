@@ -12,8 +12,9 @@ RUN mkdir -p ${DUCKDB_EXT_DIR} && \
 import duckdb;\
 import os;\
 ext_dir = os.environ.get('DUCKDB_EXT_DIR');\
-print(f'Attempting to install DuckDB extensions into: {ext_dir}');\
-con = duckdb.connect(config={'home_directory': ext_dir});\
+con = duckdb.connect(database=':memory:', read_only=False);\
+# Set the home_directory AFTER connecting using the SET command.\
+con.execute(f\"SET home_directory='{ext_dir}'\");\
 con.sql('INSTALL aws FROM core_nightly;');\
 con.sql('INSTALL httpfs FROM core_nightly;');\
 con.sql('INSTALL iceberg FROM core_nightly;');\
