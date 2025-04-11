@@ -1,7 +1,7 @@
 import duckdb
 import boto3
 
-con = duckdb.connect(database=':memory:', config={'memory_limit': '9GB','worker_threads': 5,'temp_directory':'/tmp','home_directory':'/tmp'})
+con = duckdb.connect(database=':memory:', config={'memory_limit': '9GB','worker_threads': 5,'temp_directory':'/tmp'})
 con.execute("""
 CREATE SECRET (
     TYPE s3,
