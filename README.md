@@ -16,6 +16,13 @@ sudo docker push {yourAccountID}.dkr.ecr.{yourRegion}.amazonaws.com/{yourEcrRepo
     
 ## Step 2
 use your ECR repo name in the lambda function, and you are ready to go  
+sql eg:` select * from yourS3TablesBucketName.namespace.tablename ;  `  
+lambda function event:          
+```
+{
+  "sql": "select * from testtable.testdb.test_table;"
+}
+```
 
 ## 性能
 ### 测试数据集 
