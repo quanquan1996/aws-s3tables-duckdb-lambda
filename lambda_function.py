@@ -44,7 +44,7 @@ def handler(event, context):
             "statusCode": 500,
             "error": str(e)
         }
-event = {
-    "sql": "select * from testtable.namespace_example.test_table;"
-}
-print(handler(event, None))
+# event = {
+#     "sql": "select * from testtable.namespace_example.test_table;"
+# }
+# print(handler(event, None))
