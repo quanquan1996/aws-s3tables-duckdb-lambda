@@ -21,7 +21,7 @@ def handler(event, context):
         name = table_bucket['name']
         arn = table_bucket['arn']
         try:
-            con.execute(f"DROP TABLE {name};")
+            con.execute(f"DETACH {name};")
         except:
             pass
         con.execute(
