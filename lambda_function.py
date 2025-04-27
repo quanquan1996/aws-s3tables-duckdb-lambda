@@ -16,18 +16,19 @@ CREATE SECRET (
 """)
 s3tables = boto3.client('s3tables')
 table_buckets = s3tables.list_table_buckets(maxBuckets=1000)['tableBuckets']
-for table_bucket in table_buckets:
-    name = table_bucket['name']
-    arn = table_bucket['arn']
-    con.execute(
-        f"""
-        ATTACH '{arn}' AS {name} (
-        TYPE iceberg,
-        ENDPOINT_TYPE s3_tables
-    );
-        """
-    )
 def handler(event, context):
+    for table_bucket in table_buckets:
+        name = table_bucket['name']
+        arn = table_bucket['arn']
+        con.execute(
+            f"""
+            DETACH {name};
+            ATTACH '{arn}' AS {name} (
+            TYPE iceberg,
+            ENDPOINT_TYPE s3_tables
+        );
+            """
+        )
     sql = event.get("sql")
     try:
         result = con.execute(sql).fetchall()
@@ -40,3 +41,7 @@ def handler(event, context):
             "statusCode": 500,
             "error": str(e)
         }
+event = {
+    "sql": "select * from testtable.namespace_example.test_table;"
+}
+print(handler(event, None))
