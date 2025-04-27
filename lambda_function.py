@@ -20,9 +20,12 @@ def handler(event, context):
     for table_bucket in table_buckets:
         name = table_bucket['name']
         arn = table_bucket['arn']
+        try:
+            con.execute(f"DROP TABLE {name};")
+        except:
+            pass
         con.execute(
             f"""
-            DETACH {name};
             ATTACH '{arn}' AS {name} (
             TYPE iceberg,
             ENDPOINT_TYPE s3_tables
