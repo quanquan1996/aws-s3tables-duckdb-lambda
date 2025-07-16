@@ -6,9 +6,9 @@ os.environ['HOME'] = '/tmp'
 con = duckdb.connect(database=':memory:', config={'memory_limit': '9GB','worker_threads': 5,'temp_directory':'/tmp/file/overmem'})
 # 验证设置
 con.execute("""
-FORCE INSTALL aws FROM core_nightly;
-FORCE INSTALL httpfs FROM core_nightly;
-FORCE INSTALL iceberg FROM core_nightly;
+FORCE INSTALL aws;
+FORCE INSTALL httpfs;
+FORCE INSTALL iceberg;
 CREATE SECRET (
     TYPE s3,
     PROVIDER credential_chain
@@ -16,6 +16,7 @@ CREATE SECRET (
 """)
 s3tables = boto3.client('s3tables')
 table_buckets = s3tables.list_table_buckets(maxBuckets=1000)['tableBuckets']
+
 def handler(event, context):
     for table_bucket in table_buckets:
         name = table_bucket['name']
